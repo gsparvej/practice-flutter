@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 
 import 'package:date_field/date_field.dart';
 import 'package:flutter/foundation.dart';
@@ -15,13 +13,11 @@ import 'package:radio_group_v2/radio_group_v2.dart' as v2;
 class Registration extends StatefulWidget {
   const Registration({super.key});
 
-
   @override
   State<Registration> createState() => _RegistrationState();
-
 }
-class _RegistrationState extends State<Registration> {
 
+class _RegistrationState extends State<Registration> {
   bool _obscurePassword = true;
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
@@ -41,9 +37,7 @@ class _RegistrationState extends State<Registration> {
   Uint8List? webImage;
   final ImagePicker _picker = ImagePicker();
 
-
   final _formkey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +77,11 @@ class _RegistrationState extends State<Registration> {
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.lock),
                     suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
                       onPressed: () {
                         setState(() {
                           _obscurePassword = !_obscurePassword;
@@ -129,7 +125,7 @@ class _RegistrationState extends State<Registration> {
                   pickerPlatform: dob,
                   onChanged: (DateTime? value) {
                     setState(() {
-                      selectedDOB = value ;// corrected cast
+                      selectedDOB = value; // corrected cast
                     });
                   },
                 ),
@@ -139,8 +135,10 @@ class _RegistrationState extends State<Registration> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Gender:",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      const Text(
+                        "Gender:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       v2.RadioGroup(
                         controller: genderController,
                         values: const ["Male", "Female", "Other"],
@@ -156,36 +154,36 @@ class _RegistrationState extends State<Registration> {
                   ),
                 ),
                 SizedBox(height: 20.0),
-                 TextButton.icon(
-                     icon: Icon(Icons.image),
-                     label: Text('Upload Image'),
-                      onPressed: () {
-pickImage();
-                      },
-                 ),
+
+                TextButton.icon(
+                  icon: Icon(Icons.image),
+                  label: Text('Upload Image'),
+                  onPressed: () {
+                    pickImage();
+                  },
+                ),
 
                 // display selected image preview
                 if (kIsWeb && webImage != null)
                   Padding(
-                      padding: const EdgeInsets.all(8.0),
-                  child: Image.memory(
-                    webImage! ,
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.memory(
+                      webImage!,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 else if (!kIsWeb && selectedImage != null)
                   Padding(
-                      padding: const EdgeInsets.all(8.0),
-                  child: Image.file(
-                    File(selectedImage !.path),
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.file(
+                      File(selectedImage!.path),
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  ),
-
 
                 SizedBox(height: 20.0),
                 ElevatedButton(
@@ -231,7 +229,7 @@ pickImage();
     );
   }
 
-Future<void> pickImage() async {
+  Future<void> pickImage() async {
     if (kIsWeb) {
       // for web: use image_picker_web to pick image and store as bytes
       var pickedImage = await ImagePickerWeb.getImageAsBytes();
@@ -239,21 +237,17 @@ Future<void> pickImage() async {
         setState(() {
           webImage = pickedImage;
         });
-
       }
-    }
-    else {
+    } else {
       // for Mobile: use image_picker to pick image
-      final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? pickedImage = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
       if (pickedImage != null) {
         setState(() {
           selectedImage = pickedImage;
         });
-
       }
     }
-}
-
-
-
+  }
 }
