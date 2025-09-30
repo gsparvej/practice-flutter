@@ -1,13 +1,19 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jobportal/page/adminpage.dart';
 import 'package:jobportal/page/registrationpage.dart';
+import 'package:jobportal/service/authservice.dart';
 
 class Login extends StatelessWidget {
 
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
   bool _obscurePassword = true;
+  
+  final storage = new FlutterSecureStorage();
+  AuthService authService = AuthService();
 
 
   @override
@@ -51,9 +57,7 @@ class Login extends StatelessWidget {
            height: 20.0
          ),
          ElevatedButton(onPressed: () {
-           String em = email.text;
-           String pass = password.text;
-           print('Email: $em, Password: $pass');
+           loginUser(context);
          },
              child: Text(
                "Login",
@@ -93,6 +97,32 @@ class Login extends StatelessWidget {
    );
   }
 
+  Future<void> loginUser(BuildContext context) async {
+    try{
+      final response = await authService.login(email.text, password.text);
+      
+      // Successful login , role- based navigation
+      final role = await authService.getUserRole();
+      
+      if(role == 'ADMIN') {
+        Navigator.pushReplacement(
+        context,
+            MaterialPageRoute(builder: (context) => AdminPage()),
+        );
+        
+      }
+      
+    }
+    catch(error) {
+      print('Login Failed: $error');
+    }
+  }
+  
+  
+  
+  
+  
+  
 
 
 
