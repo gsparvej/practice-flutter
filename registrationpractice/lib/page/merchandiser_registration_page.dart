@@ -11,14 +11,14 @@ import 'package:radio_group_v2/radio_group_v2.dart';
 import 'package:radio_group_v2/radio_group_v2.dart' as v2;
 import 'package:registrationpractice/service/authservice.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key});
+class MerchandsierRegistrationPage extends StatefulWidget {
+  const MerchandsierRegistrationPage({super.key});
 
   @override
-  State<RegistrationPage> createState() => _RegistrationState();
+  State<MerchandsierRegistrationPage> createState() => _RegistrationState();
 }
 
-class _RegistrationState extends State<RegistrationPage> {
+class _RegistrationState extends State<MerchandsierRegistrationPage> {
   bool _obscurePassword = true;
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
@@ -44,7 +44,7 @@ class _RegistrationState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registration'),
+        title: Text('Merchandiser Registration'),
         centerTitle: true,
         backgroundColor: Colors.blue,
         // Optional: add action buttons here if you want
@@ -301,9 +301,9 @@ class _RegistrationState extends State<RegistrationPage> {
   }
 
 
-/// Method to handle Admin registration
+  /// Method to handle Admin registration
 
-void _register() async {
+  void _register() async {
     if(_formkey.currentState!.validate()) {
       if(password.text != confirmPassword.text) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Password does not match!')),
@@ -322,7 +322,7 @@ void _register() async {
     else{
       if(selectedImage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Please Select an image')),
+          SnackBar(content: Text('Please Select an image')),
         );
         return;
       }
@@ -334,7 +334,7 @@ void _register() async {
       "password" : password.text
 
     };
-    final admin = {
+    final merchandiser = {
       "name": name.text,
       "email": email.text,
       "phone": cell.text,
@@ -350,28 +350,28 @@ void _register() async {
     // ekhane error
     if (kIsWeb && webImage != null) {
       // For Web → send photo as bytes
-      success = await apiService.registerAdminWeb(
+      success = await apiService.registerMerchandiserManagerWeb(
         user: user,
-        admin: admin,
+        merchandiser: merchandiser,
         photoBytes: webImage!, // safe to use ! because already checked above
       );
     } else if (selectedImage != null) {
       // For Mobile → send photo as file
-      success = await apiService.registerAdminWeb(
+      success = await apiService.registerMerchandiserManagerWeb(
         user: user,
-        admin: admin,
+        merchandiser: merchandiser,
         photoFile: File(selectedImage!
             .path), // safe to use ! because already checked above
       );
     }
     if(success) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration Successful')),
+        SnackBar(content: Text('Registration Successful')),
       );
 
     }
 
-}
+  }
 
 
 

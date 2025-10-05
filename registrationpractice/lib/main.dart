@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:registrationpractice/page/loginpage.dart';
+import 'package:registrationpractice/page/merchandiser_registration_page.dart';
 import 'package:registrationpractice/page/registrationpage.dart';
 
 void main() {
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-home: RegistrationPage(),
+home: MerchandsierRegistrationPage(),
     );
   }
 }
