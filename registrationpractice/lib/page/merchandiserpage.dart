@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registrationpractice/page/loginpage.dart';
 import 'package:registrationpractice/service/authservice.dart';
 
 class MerchandiserPage extends StatelessWidget {
@@ -81,7 +82,21 @@ class MerchandiserPage extends StatelessWidget {
             const Divider(),
 
             // 🔴 Logout Option
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.deepOrange),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.deepOrange)
+              ),
+              onTap: () async {
+                await _authService.logout();
+                Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => Login()),
+                );
+              },
 
+
+            ),
             // ----------------------------
             // BODY: Main content area
             // ----------------------------

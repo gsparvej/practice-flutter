@@ -128,11 +128,25 @@ class AuthService{
     return true;
   }
 
-  // Future<bool> isLoggedIn() async {
-  //   String? token = await getToken();
-  //   if(token != null && !(await isTokenExpired())) {
-  //     return true;
-  //   }
-  //
-  // }
+  Future<bool> isLoggedIn() async {
+    String? token = await getToken();
+    if(token != null && !(await isTokenExpired())) {
+      return true;
+    } else {
+      await logout();
+      return false;
+    }
+
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('authToken');
+    await prefs.remove('userRole');
+  }
+
+  Future<bool> hasRole(List<String> roles) async {
+    String? role = await getUserRole();
+    return role != null && roles.contains(role);
+  }
 }
