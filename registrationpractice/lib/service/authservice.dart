@@ -113,4 +113,26 @@ class AuthService{
     print(prefs.getString('userRole'));
     return prefs.getString('userRole');
   }
+
+  Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
+  }
+
+  Future<bool> isTokenExpired() async {
+    String? token = await getToken();
+    if(token != null) {
+      DateTime expiryDate = Jwt.getExpiryDate(token)! ;
+      return DateTime.now().isAfter(expiryDate);
+    }
+    return true;
+  }
+
+  // Future<bool> isLoggedIn() async {
+  //   String? token = await getToken();
+  //   if(token != null && !(await isTokenExpired())) {
+  //     return true;
+  //   }
+  //
+  // }
 }

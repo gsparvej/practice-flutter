@@ -4,7 +4,7 @@ import 'package:registrationpractice/page/adminpage.dart';
 import 'package:registrationpractice/page/merchandiserpage.dart';
 import 'package:registrationpractice/page/registrationpage.dart';
 import 'package:registrationpractice/service/authservice.dart';
-
+import 'package:registrationpractice/service/merchandiser_manager_service.dart';
 
 class Login extends StatelessWidget {
   final TextEditingController email = TextEditingController();
@@ -13,6 +13,8 @@ class Login extends StatelessWidget {
 
   final storage = new FlutterSecureStorage();
   AuthService authService = AuthService();
+  MerchandiserManagerService merchandiserManagerService =
+      MerchandiserManagerService();
 
   @override
   Widget build(BuildContext context) {
@@ -34,35 +36,27 @@ class Login extends StatelessWidget {
             TextField(
               controller: password,
               decoration: InputDecoration(
-                  labelText: "password",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.password)
-
+                labelText: "password",
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.password),
               ),
               obscureText: true,
             ),
-            SizedBox(
-                height: 20
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                loginUser(context);
+              },
+              child: Text(
+                "Login",
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w800),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurpleAccent,
+                foregroundColor: Colors.orangeAccent,
+              ),
             ),
-            ElevatedButton(onPressed: () {
-
-              loginUser(context);
-            },
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w800
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent,
-                    foregroundColor: Colors.orangeAccent
-                )
-            ),
-            SizedBox(
-                height: 20
-            ),
+            SizedBox(height: 20),
 
             TextButton(
               onPressed: () {
@@ -79,32 +73,42 @@ class Login extends StatelessWidget {
                 ),
               ),
             ),
-
           ],
         ),
       ),
     );
   }
-  Future<void> loginUser(BuildContext context) async{
-    try{
+
+  Future<void> loginUser(BuildContext context) async {
+    try {
       final response = await authService.login(email.text, password.text);
 
       // Successful login , role-based navigation
       final role = await authService.getUserRole();
-      if(role == 'ADMIN') {
+      if (role == 'ADMIN') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context)=> AdminPage()),);
+          MaterialPageRoute(builder: (context) => AdminPage()),
+        );
+      } else if (role == 'MERCHANDISERMANAGER') {
+        final profile = await merchandiserManagerService
+            .getMerchandiserManagerProfile();
+        if(profile != null){
+          Navigator.pushReplacement(
+              context,
+          MaterialPageRoute(
+              builder: (context) => MerchandiserPage(profile: profile),
+          ),
+          );
 
-      }
-      else if(role == 'MERCHANDISERMANAGER') {
+        } else {
+          print('Unknown role: $role');
+        }
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context)=> MerchandiserPage()),);
       }
     }
-    catch(error) {
+
+    catch (error) {
       print('Login Failed: $error');
     }
   }
