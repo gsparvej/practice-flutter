@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:registrationpractice/entity/buyer.dart';
+import 'package:registrationpractice/merchandiser/buyer_details.dart';
 import 'package:registrationpractice/page/loginpage.dart';
 import 'package:registrationpractice/service/authservice.dart';
+import 'package:registrationpractice/service/buyer_service.dart';
 
 class MerchandiserPage extends StatelessWidget {
   final Map<String, dynamic> profile;
   final AuthService _authService = AuthService();
+  final BuyerService buyerService = BuyerService();
 
   MerchandiserPage({Key? key, required this.profile}) : super(key: key);
 
@@ -61,15 +65,20 @@ class MerchandiserPage extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('My Profile'),
-              onTap: () {
+              onTap: () async{
                 Navigator.pop(context);
               },
             ),
             ListTile(
               leading: const Icon(Icons.person),
-              title: const Text('Edit Profile'),
-              onTap: () {
-                Navigator.pop(context);
+              title: const Text('View Buyer'),
+              onTap: () async {
+                Navigator.pushReplacement(
+                    context,
+                MaterialPageRoute(
+                    builder: (context) => BuyerDetails(),
+                ),
+                );
               },
             ),
             ListTile(

@@ -1,33 +1,29 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:registrationpractice/entity/buyer.dart';
 import 'package:registrationpractice/service/buyer_service.dart';
 
 class BuyerDetails extends StatefulWidget {
-
   const BuyerDetails({Key? key}) : super(key: key);
 
   @override
-  State<BuyerDetails> createState() => _MyAllBuyerState();
+  State<BuyerDetails> createState() => _BuyerDetailsState();
 }
 
-class _MyAllBuyerState extends State<BuyerDetails> {
-
-  late Future<List<BuyerDetails>> buyer;
+class _BuyerDetailsState extends State<BuyerDetails> {
+  late Future<List<Buyer>> buyerList;
 
   @override
   void initState() {
     super.initState();
-    buyer = BuyerService().fetchBuyers();
+    buyerList = BuyerService().fetchBuyers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("All Buyer List")),
-
-      body: FutureBuilder<List<BuyerDetails>>(
-        future: buyer,
+      body: FutureBuilder<List<Buyer>>(
+        future: buyerList,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -40,18 +36,28 @@ class _MyAllBuyerState extends State<BuyerDetails> {
             return ListView.builder(
               itemCount: buyers.length,
               itemBuilder: (context, index) {
-                final app = buyers[index];
+                final buyer = buyers[index];
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   child: ListTile(
-                    title: Text(app.
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                    title: Text(
+                      buyer.name ?? "Unknown Buyer",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Buyer Name: ${app.name}"),
-                        Text("Contact: ${app.}"),
+                        if (buyer.contactPerson != null)
+                          Text("Contact Person: ${buyer.contactPerson}"),
+                        if (buyer.phone != null)
+                          Text("Phone: ${buyer.phone}"),
+                        if (buyer.email != null)
+                          Text("Email: ${buyer.email}"),
+                        if (buyer.country != null)
+                          Text("Country: ${buyer.country}"),
                       ],
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
