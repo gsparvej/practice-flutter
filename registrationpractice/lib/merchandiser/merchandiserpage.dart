@@ -97,9 +97,48 @@ class MerchandiserPage extends StatelessWidget {
 
 
             ),
-            // ----------------------------
-            // BODY: Main content area
-            // ----------------------------
+
+
+
+          ],
+        ),
+      ),
+
+      // ----------------------------
+      // BODY: Main content area
+      // ----------------------------
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 8,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+                border: Border.all(
+                  color: Colors.green,
+                  width: 3,
+                ),
+              ),
+              child: CircleAvatar(
+                radius: 60, // image size
+                backgroundColor: Colors.grey[200],
+                backgroundImage: (photoUrl != null)
+                ? NetworkImage(photoUrl) // from backend
+                : const AssetImage('assets/default_avatar.png')
+                  as ImageProvider,
+              ),
+            ),
+            SizedBox(height: 20),
+            
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:registrationpractice/page/adminpage.dart';
-import 'package:registrationpractice/page/merchandiserpage.dart';
+import 'package:registrationpractice/merchandiser/merchandiserpage.dart';
 import 'package:registrationpractice/page/registrationpage.dart';
 import 'package:registrationpractice/service/authservice.dart';
 import 'package:registrationpractice/service/merchandiser_manager_service.dart';
