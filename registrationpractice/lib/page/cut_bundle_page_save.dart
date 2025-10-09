@@ -1,3 +1,4 @@
+import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:registrationpractice/entity/cut_bundle.dart';
 import 'package:registrationpractice/entity/cutting_plan.dart';
@@ -17,26 +18,32 @@ class _CutBundlePageSaveState extends State<CutBundlePageSave> {
   CuttingPlan? selectedCuttingPlan;
 
   final _bundleNoController = TextEditingController();
-  final _sizeController = TextEditingController();
   final _colorController = TextEditingController();
   final _plannedQtyController = TextEditingController();
   final _cutBundleDateController = TextEditingController();
 
+  // ✅ Size dropdown
+  final List<String> sizes = ['S', 'M', 'L', 'XL'];
+  String? selectedSize;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadCuttingPlan();
   }
 
   Future<void> loadCuttingPlan() async {
     cuttingPlan = await cutBundleService.getCuttingPlan();
-    print(cuttingPlan.toString());
     setState(() {});
   }
 
   Future<void> saveCutBundle() async {
-    if (selectedCuttingPlan == null) {
+    if (selectedCuttingPlan == null ||
+        _bundleNoController.text.isEmpty ||
+        selectedSize == null ||
+        _colorController.text.isEmpty ||
+        _plannedQtyController.text.isEmpty ||
+        _cutBundleDateController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all required fields properly'),
@@ -45,16 +52,19 @@ class _CutBundlePageSaveState extends State<CutBundlePageSave> {
       return;
     }
 
-    final cutbundle = CutBundle(
+    final cutBundle = CutBundle(
       bundleNo: _bundleNoController.text,
-      size: _sizeController.text,
+      size: selectedSize ?? '',
       color: _colorController.text,
-      plannedQty: _plannedQtyController.hashCode,
+      plannedQty: int.tryParse(_plannedQtyController.text) ?? 0,
       cutBundleDate: _cutBundleDateController.text,
-      cuttingPlanId: selectedCuttingPlan!.id,
+      cuttingPlanId: selectedCuttingPlan!.id!, // ✅ Correct way
     );
 
-    bool success = await cutBundleService.addCutBundle(cutbundle);
+    print(cutBundle.toJson()); // Debug log
+
+    bool success = await cutBundleService.addCutBundle(cutBundle);
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -63,6 +73,18 @@ class _CutBundlePageSaveState extends State<CutBundlePageSave> {
         backgroundColor: success ? Colors.green : Colors.red,
       ),
     );
+
+    if (success) {
+      // Optionally clear form after success
+      _bundleNoController.clear();
+      _colorController.clear();
+      _plannedQtyController.clear();
+      _cutBundleDateController.clear();
+      setState(() {
+        selectedSize = null;
+        selectedCuttingPlan = null;
+      });
+    }
   }
 
   @override
@@ -75,40 +97,68 @@ class _CutBundlePageSaveState extends State<CutBundlePageSave> {
           children: [
             DropdownButtonFormField<CuttingPlan>(
               value: selectedCuttingPlan,
-              decoration: const InputDecoration(labelText: 'Cutting Plan Id'),
+              decoration: const InputDecoration(labelText: 'Cutting Plan ID'),
               items: cuttingPlan.map((c) {
-                return DropdownMenuItem(value: c, child: Text(c.id as String));
+                return DropdownMenuItem(value: c, child: Text(c.id.toString()));
               }).toList(),
               onChanged: (val) {
                 setState(() => selectedCuttingPlan = val);
               },
             ),
-
             const SizedBox(height: 16),
+
             TextField(
               controller: _bundleNoController,
               decoration: const InputDecoration(labelText: 'Cut Bundle No'),
             ),
-            TextField(
-              controller: _sizeController,
+
+            const SizedBox(height: 16),
+
+            DropdownButtonFormField<String>(
+              value: selectedSize,
               decoration: const InputDecoration(labelText: 'Size'),
+              items: sizes.map((size) {
+                return DropdownMenuItem(value: size, child: Text(size));
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedSize = value;
+                });
+              },
             ),
+
+            const SizedBox(height: 16),
+
             TextField(
               controller: _colorController,
               decoration: const InputDecoration(labelText: 'Color'),
             ),
+
+            const SizedBox(height: 16),
+
             TextField(
               controller: _plannedQtyController,
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(labelText: 'Planned Quantity'),
             ),
-            TextField(
-              controller: _cutBundleDateController,
-              decoration: const InputDecoration(labelText: 'Cut Bundle Date'),
+
+            const SizedBox(height: 16),
+
+            DateTimeFormField(
+              decoration: const InputDecoration(labelText: "Cut Bundle Date"),
+              mode: DateTimeFieldPickerMode.date,
+              onChanged: (DateTime? value) {
+                if (value != null) {
+                  _cutBundleDateController.text = value.toIso8601String();
+                }
+              },
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 24),
+
             ElevatedButton(
               onPressed: saveCutBundle,
-              child: const Text('Save Address'),
+              child: const Text('Save Cut Bundle'),
             ),
           ],
         ),

@@ -1,20 +1,22 @@
 class CuttingPlan {
   int? id;
   String? markerNo;
-  int? fabricWidth;
+  double? fabricWidth;
   int? layCount;
-  int? plannedPcs;
+  double? plannedPcs;
   double? fabricUsed;
   String? status;
   String? cuttingDate;
-  int? actualPcs;
-  int? markerEfficiency;
+  double? actualPcs;
+  double? markerEfficiency;
   double? fabricLength;
   int? markerCount;
   String? remarks;
   String? createdBy;
   String? description;
   int? markerOutput;
+  int uomId;
+  int productionOrderId;
 
   CuttingPlan({
     this.id,
@@ -33,29 +35,35 @@ class CuttingPlan {
     required this.createdBy,
     required this.description,
     required this.markerOutput,
+    required this.uomId,
+    required this.productionOrderId,
   });
 
+  /// ✅ FROM JSON
   factory CuttingPlan.fromJson(Map<String, dynamic> json) {
     return CuttingPlan(
-      id: json['id'],
-      markerNo: json['markerNo'],
-      fabricWidth: json['fabricWidth'],
-      layCount: json['layCount'],
-      plannedPcs: json['plannedPcs'],
-      fabricUsed: (json['fabricUsed'] as num).toDouble(),
-      status: json['status'],
-      cuttingDate: json['cuttingDate'],
-      actualPcs: json['actualPcs'],
-      markerEfficiency: json['markerEfficiency'],
-      fabricLength: (json['fabricLength'] as num).toDouble(),
-      markerCount: json['markerCount'],
-      remarks: json['remarks'],
-      createdBy: json['createdBy'],
-      description: json['description'],
-      markerOutput: json['markerOutput'],
+      id: json['id'] as int?,
+      markerNo: json['markerNo'] as String? ?? '',
+      fabricWidth: (json['fabricWidth'] as num?)?.toDouble() ?? 0.0,
+      layCount: json['layCount'] as int? ?? 0,
+      plannedPcs: (json['plannedPcs'] as num?)?.toDouble() ?? 0.0,
+      fabricUsed: (json['fabricUsed'] as num?)?.toDouble() ?? 0.0,
+      status: json['status'] as String? ?? '',
+      cuttingDate: json['cuttingDate'] as String? ?? '',
+      actualPcs: (json['actualPcs'] as num?)?.toDouble() ?? 0.0,
+      markerEfficiency: (json['markerEfficiency'] as num?)?.toDouble() ?? 0.0,
+      fabricLength: (json['fabricLength'] as num?)?.toDouble() ?? 0.0,
+      markerCount: json['markerCount'] as int? ?? 0,
+      remarks: json['remarks'] as String? ?? '',
+      createdBy: json['createdBy'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      markerOutput: json['markerOutput'] as int? ?? 0,
+      uomId: json['uomId'] as int? ?? 0,
+      productionOrderId: json['productionOrderId'] as int? ?? 0,
     );
   }
 
+  /// ✅ TO JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -74,6 +82,8 @@ class CuttingPlan {
       'createdBy': createdBy,
       'description': description,
       'markerOutput': markerOutput,
+      'uomId': uomId,
+      'productionOrderId': productionOrderId,
     };
   }
 }

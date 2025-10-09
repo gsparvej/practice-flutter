@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:registrationpractice/entity/buyer.dart';
 import 'package:registrationpractice/merchandiser/buyer_details.dart';
+import 'package:registrationpractice/page/cut_bundle_page_save.dart';
+import 'package:registrationpractice/page/cut_bundle_page_view.dart';
+import 'package:registrationpractice/page/cutting_plan-view.dart';
 import 'package:registrationpractice/page/loginpage.dart';
 import 'package:registrationpractice/service/authservice.dart';
 import 'package:registrationpractice/service/buyer_service.dart';
@@ -73,7 +76,7 @@ class MerchandiserPage extends StatelessWidget {
               leading: const Icon(Icons.person),
               title: const Text('View Buyer'),
               onTap: () async {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                 MaterialPageRoute(
                     builder: (context) => BuyerDetails(),
@@ -83,9 +86,38 @@ class MerchandiserPage extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.person),
-              title: const Text('Settings'),
-              onTap: () {
-                Navigator.pop(context);
+              title: const Text('Save Cut Bundle'),
+              onTap: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CutBundlePageSave(),
+                    ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('View Cut Bundle'),
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CutBundlePageView(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('View Cutting Plans'),
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CuttingPlanPageView(),
+                  ),
+                );
               },
             ),
             const Divider(),
@@ -99,7 +131,7 @@ class MerchandiserPage extends StatelessWidget {
               ),
               onTap: () async {
                 await _authService.logout();
-                Navigator.pushReplacement(context,
+                Navigator.push(context,
                 MaterialPageRoute(builder: (_) => Login()),
                 );
               },

@@ -1,43 +1,39 @@
 class CutBundle {
-  int? id;
-  String? bundleNo;
-  String? size;
-  String? color;
-  int? plannedQty;
-  String? cutBundleDate;
-  int? cuttingPlanId;
+  String bundleNo;
+  String color;
+  int plannedQty;
+  String size;
+  String cutBundleDate;
+  int cuttingPlanId; // store only the ID
 
   CutBundle({
-    this.id,
-    this.bundleNo,
-    this.size,
-    this.color,
-    this.plannedQty,
-    this.cutBundleDate,
-    this.cuttingPlanId,
+    required this.bundleNo,
+    required this.color,
+    required this.plannedQty,
+    required this.size,
+    required this.cutBundleDate,
+    required this.cuttingPlanId,
   });
-
-  factory CutBundle.fromJson(Map<String, dynamic> json) {
-    return CutBundle(
-      id: json['id'],
-      bundleNo: json['bundleNo'],
-      size: json['size'],
-      color: json['color'],
-      plannedQty: json['plannedQty'],
-      cutBundleDate: json['cutBundleDate'],
-      cuttingPlanId: json['cuttingPlanId'],
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'bundleNo': bundleNo,
-      'size': size,
       'color': color,
       'plannedQty': plannedQty,
+      'size': size,
       'cutBundleDate': cutBundleDate,
-      'cuttingPlanId': cuttingPlanId,
+      'cuttingPlan': {'id': cuttingPlanId}, // nested object like Angular
     };
   }
+  factory CutBundle.fromJson(Map<String, dynamic> json) {
+    return CutBundle(
+      bundleNo: json['bundleNo'],
+      color: json['color'],
+      plannedQty: json['plannedQty'],
+      size: json['size'],
+      cutBundleDate: json['cutBundleDate'],
+      cuttingPlanId: json['cuttingPlan']?['id'] ?? 0, // ✅ FIXED
+    );
+  }
+
 }
