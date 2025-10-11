@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:registrationpractice/entity/buyer.dart';
 import 'package:registrationpractice/merchandiser/buyer_details.dart';
+import 'package:registrationpractice/merchandiser/uom_view.dart';
 import 'package:registrationpractice/page/cut_bundle_page_save.dart';
 import 'package:registrationpractice/page/cut_bundle_page_view.dart';
 import 'package:registrationpractice/page/cutting_plan-view.dart';
@@ -116,6 +117,18 @@ class MerchandiserPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => CuttingPlanPageView(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('View UOM'),
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UomView(),
                   ),
                 );
               },

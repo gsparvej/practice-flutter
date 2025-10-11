@@ -1,6 +1,6 @@
 class Uom {
   int? id;
-  dynamic? productName;
+  dynamic productName;
   String? size;
   int? body;
   int? sleeve;
@@ -21,9 +21,10 @@ class Uom {
       pocket: json['pocket'],
       wastage: json['wastage'],
       shrinkage: json['shrinkage'],
-      baseFabric: json['baseFabric'],
+      baseFabric: json['baseFabric'] != null ? (json['baseFabric'] as num).toDouble() : null,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
